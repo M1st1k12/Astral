@@ -64,7 +64,7 @@ export default function PostCard({ post, onUpdate }) {
       {post.mediaUrl && (
         <div className="mt-3">
           {post.mediaType === "image" ? (
-            <img src={mediaUrl} alt="media" className="rounded-xl max-h-96" />
+            <img src={mediaUrl} alt="media" className="rounded-xl max-h-96 w-full object-cover" />
           ) : (
             <a className="text-sky-600 underline" href={mediaUrl} target="_blank" rel="noreferrer">
               Скачать файл
@@ -83,7 +83,7 @@ export default function PostCard({ post, onUpdate }) {
 
       <PostActions post={post} onUpdate={onUpdate} />
 
-      <form onSubmit={addComment} className="mt-3 flex gap-2">
+      <form onSubmit={addComment} className="mt-3 flex flex-col sm:flex-row gap-2">
         <input
           className="flex-1 rounded-xl bg-slate-50 border border-slate-200 focus:border-sky-400 focus:ring-0"
           placeholder="Добавить комментарий"

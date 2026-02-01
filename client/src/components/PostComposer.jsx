@@ -58,8 +58,8 @@ export default function PostComposer({ onCreated }) {
           onChange={(e) => setContent(e.target.value)}
         />
       </div>
-      <div className="mt-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-slate-500">
+      <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap items-center gap-2 text-slate-500 min-w-0">
           <button
             type="button"
             onClick={() => fileRef.current?.click()}
@@ -86,7 +86,9 @@ export default function PostComposer({ onCreated }) {
               onChange={(e) => setMedia(e.target.files?.[0] || null)}
             />
           </label>
-          <span className="text-sm text-slate-500">{media?.name || "Файл не выбран"}</span>
+          <span className="text-sm text-slate-500 truncate max-w-[180px] sm:max-w-[260px]">
+            {media?.name || "Файл не выбран"}
+          </span>
         </div>
         <div className="hidden md:flex items-center gap-1 text-slate-500">
           {quickEmojis.map((e) => (
@@ -104,7 +106,7 @@ export default function PostComposer({ onCreated }) {
         <button
           type="submit"
           disabled={loading}
-          className="px-4 py-2 rounded-full bg-sky-400 text-white font-semibold hover:bg-sky-500 transition transform hover:-translate-y-0.5 active:translate-y-0"
+          className="w-full sm:w-auto px-4 py-2 rounded-full bg-sky-400 text-white font-semibold hover:bg-sky-500 transition transform hover:-translate-y-0.5 active:translate-y-0"
         >
           {loading ? "Публикую..." : "Опубликовать"}
         </button>

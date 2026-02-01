@@ -74,7 +74,7 @@ function Icon({ name }) {
   }
 }
 
-export default function Sidebar() {
+export default function Sidebar({ open = false, onClose }) {
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
   const loadNotifications = useNotificationStore((s) => s.load);
@@ -88,45 +88,71 @@ export default function Sidebar() {
   const nav = user?.isAdmin ? [...baseNav, { to: "/admin", label: "Админ", icon: "admin" }] : baseNav;
 
   return (
-    <aside className="w-full md:w-24 p-4">
-      <div className="rounded-[28px] p-3 h-full flex flex-col items-center gap-6 bg-white border border-slate-200 shadow-lg">
-        <img src={logo} alt="Astral" className="h-16 w-16 object-contain" />
-
-        <nav className="flex flex-col items-center gap-4">
-          {nav.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              className="flex flex-col items-center gap-1 text-[10px] text-slate-600 hover:text-slate-900"
+    <>
+      <button
+        onClick={onClose}
+        className={`fixed inset-0 bg-slate-900/30 z-30 transition-opacity md:hidden ${
+          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+        aria-label="Close menu"
+      />
+      <aside
+        className={`fixed inset-y-0 left-0 z-40 w-72 p-4 transition-transform duration-300 md:static md:w-24 md:translate-x-0 ${
+          open ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        }`}
+      >
+        <div className="rounded-[28px] p-3 h-full flex flex-col items-center gap-6 bg-white border border-slate-200 shadow-lg">
+          <div className="w-full flex items-center justify-between md:justify-center">
+            <img src={logo} alt="Astral" className="h-12 w-12 object-contain" />
+            <button
+              onClick={onClose}
+              className="md:hidden h-9 w-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-600"
+              aria-label="Close menu"
             >
-              <span className="relative h-11 w-11 rounded-full border border-slate-200 flex items-center justify-center bg-white text-slate-700">
-                <Icon name={item.icon} />
-                {item.to === "/notifications" && unread > 0 && (
-                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-sky-500 text-white text-[10px] flex items-center justify-center px-1">
-                    {unread}
-                  </span>
-                )}
-              </span>
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="mt-auto flex flex-col items-center gap-2">
-          <div className="h-12 w-12 rounded-full bg-slate-200 overflow-hidden">
-            {user?.avatar && (
-              <img
-                src={(import.meta.env.VITE_API_URL || "http://localhost:5000") + user.avatar}
-                alt="avatar"
-                className="h-full w-full object-cover"
-              />
-            )}
+              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M6 6l12 12" />
+                <path d="M18 6l-12 12" />
+              </svg>
+            </button>
           </div>
-          <button className="text-xs text-slate-500 hover:text-slate-900" onClick={logout}>
-            Logout
-          </button>
+
+          <nav className="flex flex-col items-center gap-4 w-full">
+            {nav.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                onClick={onClose}
+                className="flex md:flex-col items-center gap-3 md:gap-1 text-sm md:text-[10px] text-slate-600 hover:text-slate-900 w-full md:w-auto"
+              >
+                <span className="relative h-11 w-11 rounded-full border border-slate-200 flex items-center justify-center bg-white text-slate-700">
+                  <Icon name={item.icon} />
+                  {item.to === "/notifications" && unread > 0 && (
+                    <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-sky-500 text-white text-[10px] flex items-center justify-center px-1">
+                      {unread}
+                    </span>
+                  )}
+                </span>
+                <span className="md:block">{item.label}</span>
+              </Link>
+            ))}
+          </nav>
+
+          <div className="mt-auto flex flex-col items-center gap-2 w-full">
+            <div className="h-12 w-12 rounded-full bg-slate-200 overflow-hidden">
+              {user?.avatar && (
+                <img
+                  src={(import.meta.env.VITE_API_URL || "http://localhost:5000") + user.avatar}
+                  alt="avatar"
+                  className="h-full w-full object-cover"
+                />
+              )}
+            </div>
+            <button className="text-xs text-slate-500 hover:text-slate-900" onClick={logout}>
+              Logout
+            </button>
+          </div>
         </div>
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 }

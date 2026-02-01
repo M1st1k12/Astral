@@ -38,13 +38,13 @@ export default function Feed() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
-      className="max-w-2xl mx-auto space-y-4"
+      className="w-full md:max-w-2xl md:mx-auto space-y-4"
     >
       <motion.div
         initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.25 }}
-        className="rounded-2xl p-3 flex items-center gap-2 bg-white border border-slate-200 shadow-lg transition-shadow hover:shadow-xl"
+        className="rounded-2xl p-3 flex flex-wrap items-center gap-2 bg-white border border-slate-200 shadow-lg transition-shadow hover:shadow-xl"
       >
         <button
           className={`px-4 py-2 rounded-xl text-sm ${
@@ -62,7 +62,7 @@ export default function Feed() {
         >
           Подписки
         </button>
-        <span className="ml-auto text-xs text-slate-400">Обновлено сейчас</span>
+        <span className="sm:ml-auto text-xs text-slate-400">Обновлено сейчас</span>
       </motion.div>
 
       <PostComposer onCreated={handleCreated} />
