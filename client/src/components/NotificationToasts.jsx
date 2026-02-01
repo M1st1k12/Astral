@@ -1,0 +1,92 @@
+﻿import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import useNotificationStore from "../store/notificationStore";
+
+function getText(n) {
+  const from = n?.from?.username || "Кто-то";
+  switch (n.type) {
+    case "like":
+      return `${from} поставил(а) лайк`;
+    case "comment":
+      return `${from} оставил(а) комментарий`;
+    case "follow":
+      return `${from} подписался(ась)`;
+    case "follow_request":
+      return `${from} запросил(а) подписку`;
+    case "follow_approved":
+      return `${from} одобрил(а) запрос`;
+    case "repost":
+      return `${from} сделал(а) репост`;
+    case "message":
+      return `${from} написал(а) сообщение`;
+    default:
+      return "Новое уведомление";
+  }
+}
+
+export default function NotificationToasts() {
+  const notifications = useNotificationStore((s) => s.notifications);
+  const [toasts, setToasts] = useState([]);
+  const seenRef = useRef(new Set());
+  const initialized = useRef(false);
+
+  useEffect(() => {
+    if (!initialized.current) {
+      notifications.forEach((n) => n?._id && seenRef.current.add(n._id));
+      initialized.current = true;
+      return;
+    }
+
+    const fresh = notifications.filter((n) => n?._id && !seenRef.current.has(n._id));
+    if (fresh.length === 0) return;
+
+    fresh.forEach((n) => {
+      seenRef.current.add(n._id);
+      const toast = {
+        id: n._id,
+        text: getText(n),
+        avatar: n?.from?.avatar || "",
+        createdAt: n?.createdAt
+      };
+      setToasts((prev) => [toast, ...prev].slice(0, 5));
+      setTimeout(() => {
+        setToasts((prev) => prev.filter((t) => t.id !== n._id));
+      }, 4500);
+    });
+  }, [notifications]);
+
+  const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+  return (
+    <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
+      <AnimatePresence>
+        {toasts.map((t) => (
+          <motion.div
+            key={t.id}
+            initial={{ opacity: 0, y: 12, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 12, scale: 0.98 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="w-72 rounded-2xl border border-slate-200 bg-white shadow-lg p-3 flex items-center gap-3"
+          >
+            <div className="h-10 w-10 rounded-full bg-slate-200 overflow-hidden">
+              {t.avatar && (
+                <img
+                  src={baseUrl + t.avatar}
+                  alt="avatar"
+                  className="h-full w-full object-cover"
+                />
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-sm text-slate-900">{t.text}</div>
+              <div className="text-xs text-slate-400">
+                {t.createdAt ? new Date(t.createdAt).toLocaleTimeString() : ""}
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </AnimatePresence>
+    </div>
+  );
+}
