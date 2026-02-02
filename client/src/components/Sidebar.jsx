@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import useAuthStore from "../store/authStore";
 import useNotificationStore from "../store/notificationStore";
 import logo from "../assets/astral-logo.svg";
+import { resolveMediaUrl } from "../utils/media";
 
 const baseNav = [
   { to: "/", label: "Лента", icon: "home" },
@@ -138,15 +139,15 @@ export default function Sidebar({ open = false, onClose }) {
           </nav>
 
           <div className="mt-auto flex flex-col items-center gap-2 w-full">
-            <div className="h-12 w-12 rounded-full bg-slate-200 overflow-hidden">
+            <Link to="/profile" className="h-12 w-12 rounded-full bg-slate-200 overflow-hidden">
               {user?.avatar && (
                 <img
-                  src={(import.meta.env.VITE_API_URL || "http://localhost:5000") + user.avatar}
+                  src={resolveMediaUrl(user.avatar)}
                   alt="avatar"
                   className="h-full w-full object-cover"
                 />
               )}
-            </div>
+            </Link>
             <button className="text-xs text-slate-500 hover:text-slate-900" onClick={logout}>
               Logout
             </button>
@@ -156,3 +157,4 @@ export default function Sidebar({ open = false, onClose }) {
     </>
   );
 }
+

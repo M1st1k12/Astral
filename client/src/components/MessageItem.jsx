@@ -1,7 +1,12 @@
 ﻿import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import useAuthStore from "../store/authStore";
+import { reactMessage } from "../api/extra";
+import { resolveMediaUrl } from "../utils/media";
 import MessageActions from "./MessageActions.jsx";
+
+const quickReactions = ["👍", "🔥", "😂", "😮", "❤️"];
 
 export default function MessageItem({ message }) {
   const user = useAuthStore((s) => s.user);
@@ -28,10 +33,12 @@ export default function MessageItem({ message }) {
   }, [message.reactions?.length]);
 
   if (message.deletedAt) return null;
-  const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
-  const fileUrl = message.fileUrl?.startsWith("/uploads")
-    ? `${baseUrl}${message.fileUrl}`
-    : message.fileUrl;
+  const fileUrl = resolveMediaUrl(message.fileUrl);
+  const senderProfile = message.sender?._id ? `/user/${message.sender._id}` : "/profile";
+
+  async function react(emoji) {
+    await reactMessage(message._id, emoji);
+  }
 
   return (
     <motion.div
@@ -50,9 +57,9 @@ export default function MessageItem({ message }) {
             : "bg-white border border-slate-200"
         }`}
       >
-        <div className="text-xs text-slate-500 mb-1">
+        <Link to={senderProfile} className="text-xs text-slate-500 mb-1 inline-block hover:text-sky-600">
           {message.sender?.username || "Unknown"}
-        </div>
+        </Link>
         {message.type !== "text" && message.fileUrl && (
           <div className="mb-2">
             {message.type === "image" ? (
@@ -79,6 +86,20 @@ export default function MessageItem({ message }) {
           >
             {message.reactions.map((r) => r.emoji).join(" ")}
           </motion.div>
+        )}
+        {!isOwn && (
+          <div className="mt-2 flex items-center gap-1 text-xs text-slate-500">
+            {quickReactions.map((emoji) => (
+              <button
+                key={emoji}
+                className="h-7 w-7 rounded-full border border-slate-200 hover:bg-slate-50"
+                onClick={() => react(emoji)}
+                title="Реакция"
+              >
+                {emoji}
+              </button>
+            ))}
+          </div>
         )}
         {isOwn && <MessageActions message={message} />}
       </motion.div>

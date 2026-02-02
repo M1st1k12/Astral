@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { searchAll } from "../api/extra";
 import { Link } from "react-router-dom";
 import PostCard from "../components/PostCard.jsx";
+import { resolveMediaUrl } from "../utils/media";
 
 const fadeUp = {
   initial: { opacity: 0, y: 10 },
@@ -69,7 +70,7 @@ export default function Search() {
                 className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 hover:bg-white hover:border-slate-300 transition"
               >
                 <img
-                  src={u.avatar || "https://i.pravatar.cc/80?img=5"}
+                  src={u.avatar ? resolveMediaUrl(u.avatar) : "https://i.pravatar.cc/80?img=5"}
                   alt={u.username}
                   className="h-11 w-11 rounded-full object-cover"
                 />

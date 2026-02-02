@@ -1,9 +1,11 @@
 ﻿import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import useAuthStore from "../store/authStore";
 import useConversationStore from "../store/conversationStore";
 import api from "../api/http";
 import { blockUser, deleteConversation } from "../api/extra";
+import { resolveMediaUrl } from "../utils/media";
 
 export default function ConversationList() {
   const user = useAuthStore((s) => s.user);
@@ -73,10 +75,21 @@ export default function ConversationList() {
               <button
                 key={u._id}
                 onClick={() => startConversation(u._id)}
-                className="w-full text-left p-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200"
+                className="w-full text-left p-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 flex items-center gap-3"
               >
-                <p className="text-sm font-medium">{u.username}</p>
-                <p className="text-xs text-slate-400">@{u.userTag || u.email}</p>
+                <div className="h-9 w-9 rounded-full bg-slate-200 overflow-hidden">
+                  {u.avatar && (
+                    <img
+                      src={resolveMediaUrl(u.avatar)}
+                      alt={u.username}
+                      className="h-full w-full object-cover"
+                    />
+                  )}
+                </div>
+                <div>
+                  <p className="text-sm font-medium">{u.username}</p>
+                  <p className="text-xs text-slate-400">@{u.userTag || u.email}</p>
+                </div>
               </button>
             ))}
           </div>
@@ -88,32 +101,44 @@ export default function ConversationList() {
         <div className="mt-3 space-y-2">
           {conversations.map((conversation) => {
             const other = conversation.participants.find((p) => p._id !== user?._id);
+            const profile = other?._id ? `/user/${other._id}` : "/profile";
             return (
               <motion.div
                 key={conversation._id}
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25 }}
-                className="w-full text-left p-3 rounded-2xl bg-slate-50 hover:bg-white border border-slate-200 transition"
+                className="w-full p-3 rounded-2xl bg-slate-50 hover:bg-white border border-slate-200 transition"
               >
-                <button
-                  className="w-full text-left"
-                  onClick={() => setActiveConversation(conversation)}
-                >
-                  <div className="flex items-center justify-between">
-                    <p className="font-medium text-slate-900">{other?.username || "Unknown"}</p>
-                    <span
-                      className={`text-xs ${
-                        other?.status === "online" ? "text-emerald-600" : "text-slate-400"
-                      }`}
-                    >
-                      {other?.status === "online" ? "в сети" : "офлайн"}
-                    </span>
-                  </div>
-                  <p className="text-xs text-slate-400 truncate">
-                    {conversation.lastMessage?.content || "Нет сообщений"}
-                  </p>
-                </button>
+                <div className="flex items-center gap-3">
+                  <Link to={profile} className="h-10 w-10 rounded-full bg-slate-200 overflow-hidden">
+                    {other?.avatar && (
+                      <img
+                        src={resolveMediaUrl(other.avatar)}
+                        alt={other?.username}
+                        className="h-full w-full object-cover"
+                      />
+                    )}
+                  </Link>
+                  <button
+                    className="flex-1 text-left"
+                    onClick={() => setActiveConversation(conversation)}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium text-slate-900">{other?.username || "Unknown"}</span>
+                      <span
+                        className={`text-xs ${
+                          other?.status === "online" ? "text-emerald-600" : "text-slate-400"
+                        }`}
+                      >
+                        {other?.status === "online" ? "в сети" : "офлайн"}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-400 truncate">
+                      {conversation.lastMessage?.content || "Нет сообщений"}
+                    </p>
+                  </button>
+                </div>
                 <div className="mt-2 flex items-center gap-2">
                   <button
                     className="text-xs px-2 py-1 rounded-lg border border-slate-200"

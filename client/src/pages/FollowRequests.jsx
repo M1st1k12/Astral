@@ -1,6 +1,8 @@
 ﻿import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { getFollowRequests, approveFollow, denyFollow } from "../api/extra";
+import { resolveMediaUrl } from "../utils/media";
 
 export default function FollowRequests() {
   const [requests, setRequests] = useState([]);
@@ -18,8 +20,6 @@ export default function FollowRequests() {
     await denyFollow(id);
     setRequests((prev) => prev.filter((r) => r._id !== id));
   }
-
-  const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
   return (
     <motion.div
@@ -42,11 +42,19 @@ export default function FollowRequests() {
       {requests.map((r) => (
         <div key={r._id} className="rounded-2xl p-4 bg-white border border-slate-200 shadow-lg flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-slate-200 overflow-hidden">
-              {r.avatar && <img src={baseUrl + r.avatar} alt="avatar" className="h-full w-full object-cover" />}
-            </div>
+            <Link to={`/user/${r._id}`} className="h-10 w-10 rounded-full bg-slate-200 overflow-hidden">
+              {r.avatar && (
+                <img
+                  src={resolveMediaUrl(r.avatar)}
+                  alt="avatar"
+                  className="h-full w-full object-cover"
+                />
+              )}
+            </Link>
             <div>
-              <p className="font-medium">{r.username}</p>
+              <Link to={`/user/${r._id}`} className="font-medium hover:text-sky-600">
+                {r.username}
+              </Link>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -62,4 +70,3 @@ export default function FollowRequests() {
     </motion.div>
   );
 }
-

@@ -1,7 +1,9 @@
 ﻿import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import useAuthStore from "../store/authStore";
 import useConversationStore from "../store/conversationStore";
+import { resolveMediaUrl } from "../utils/media";
 import MessageItem from "./MessageItem.jsx";
 import MessageInput from "./MessageInput.jsx";
 
@@ -52,6 +54,7 @@ export default function MessageThread() {
   }
 
   const other = activeConversation.participants.find((p) => p._id !== user?._id);
+  const otherProfile = other?._id ? `/user/${other._id}` : "/profile";
 
   return (
     <motion.div
@@ -61,25 +64,25 @@ export default function MessageThread() {
       className="flex-1 rounded-2xl p-4 flex flex-col bg-white border border-slate-200 shadow-lg"
     >
       <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-        <div className="flex items-center gap-3">
+        <Link to={otherProfile} className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-full bg-slate-200 overflow-hidden">
             {other?.avatar && (
               <img
-                src={(import.meta.env.VITE_API_URL || "http://localhost:5000") + other.avatar}
+                src={resolveMediaUrl(other.avatar)}
                 alt="avatar"
                 className="h-full w-full object-cover"
               />
             )}
           </div>
           <div>
-            <p className="font-semibold">{other?.username}</p>
+            <p className="font-semibold hover:text-sky-600 transition">{other?.username}</p>
             <p className="text-xs text-slate-400">
               {other?.status === "online"
                 ? "В сети"
                 : `Был(а) ${new Date(other?.lastSeen || Date.now()).toLocaleString()}`}
             </p>
           </div>
-        </div>
+        </Link>
         <span className="text-xs text-sky-600">Личные сообщения</span>
       </div>
 

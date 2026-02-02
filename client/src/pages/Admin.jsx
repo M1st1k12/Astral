@@ -47,6 +47,8 @@ export default function Admin() {
   const [query, setQuery] = useState("");
   const [error, setError] = useState("");
   const [modal, setModal] = useState(null);
+  const [boostDraft, setBoostDraft] = useState({});
+  const [boostMode, setBoostMode] = useState("set");
 
   useEffect(() => {
     if (!user?.isAdmin) return;
@@ -95,6 +97,40 @@ export default function Admin() {
   async function deleteClan(id) {
     await api.delete(`/admin/clans/${id}`);
     setClans((prev) => prev.filter((c) => c._id !== id));
+  }
+
+  async function applyBoost(postId) {
+    const draft = boostDraft[postId] || {};
+    const payload = {
+      likes: draft.likes ?? 0,
+      comments: draft.comments ?? 0,
+      views: draft.views ?? 0,
+      mode: boostMode
+    };
+    const { data } = await api.post(`/admin/posts/${postId}/boost`, payload);
+    setPosts((prev) => prev.map((p) => (p._id === postId ? { ...p, boost: data.post.boost } : p)));
+  }
+
+  function setBoostField(postId, field, value) {
+    const num = Number(value);
+    setBoostDraft((prev) => ({
+      ...prev,
+      [postId]: {
+        ...prev[postId],
+        [field]: Number.isFinite(num) ? num : 0
+      }
+    }));
+  }
+
+  function quickBoost(postId, likes, comments, views) {
+    setBoostDraft((prev) => ({
+      ...prev,
+      [postId]: {
+        likes: likes ?? prev[postId]?.likes ?? 0,
+        comments: comments ?? prev[postId]?.comments ?? 0,
+        views: views ?? prev[postId]?.views ?? 0
+      }
+    }));
   }
 
   if (!user?.isAdmin) {
@@ -156,6 +192,23 @@ export default function Admin() {
               {t.label}
             </button>
           ))}
+          {tab === "posts" && (
+            <div className="flex items-center gap-2 ml-2 text-xs text-slate-500">
+              <span>Накрутка:</span>
+              <button
+                className={`px-2 py-1 rounded-lg border ${boostMode === "set" ? "bg-slate-900 text-white border-slate-900" : "border-slate-200"}`}
+                onClick={() => setBoostMode("set")}
+              >
+                Set
+              </button>
+              <button
+                className={`px-2 py-1 rounded-lg border ${boostMode === "inc" ? "bg-slate-900 text-white border-slate-900" : "border-slate-200"}`}
+                onClick={() => setBoostMode("inc")}
+              >
+                Inc
+              </button>
+            </div>
+          )}
           <input
             className="ml-auto w-56 rounded-xl bg-slate-50 border border-slate-200 focus:border-sky-400 focus:ring-0 text-sm"
             placeholder="Поиск..."
@@ -212,22 +265,78 @@ export default function Admin() {
         )}
 
         {tab === "posts" && (
-          <div className="mt-4 space-y-2">
-            {filteredPosts.map((p) => (
-              <div key={p._id} className="rounded-xl border border-slate-200 bg-slate-50 p-3 flex items-center justify-between">
-                <div className="text-sm text-slate-700">
-                  <span className="font-semibold">{p.author?.username || "Автор"}</span>
-                  <span className="text-xs text-slate-500 ml-2">{new Date(p.createdAt).toLocaleString()}</span>
-                  <div className="text-xs text-slate-500 truncate max-w-[520px]">{p.content || "(без текста)"}</div>
+          <div className="mt-4 space-y-3">
+            {filteredPosts.map((p) => {
+              const likeCount = (p.likes?.length || 0) + (p.boost?.likes || 0);
+              const commentCount = (p.comments?.length || 0) + (p.boost?.comments || 0);
+              const viewCount = (p.views || 0) + (p.boost?.views || 0);
+              const draft = boostDraft[p._id] || { likes: 0, comments: 0, views: 0 };
+              return (
+                <div key={p._id} className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="text-sm text-slate-700">
+                      <span className="font-semibold">{p.author?.username || "Автор"}</span>
+                      <span className="text-xs text-slate-500 ml-2">{new Date(p.createdAt).toLocaleString()}</span>
+                      <div className="text-xs text-slate-500 truncate max-w-[520px]">{p.content || "(без текста)"}</div>
+                      <div className="mt-2 text-xs text-slate-500 flex items-center gap-3">
+                        <span>👍 {likeCount}</span>
+                        <span>💬 {commentCount}</span>
+                        <span>👁 {viewCount}</span>
+                        <span className="text-slate-400">boost: +{p.boost?.likes || 0}/+{p.boost?.comments || 0}/+{p.boost?.views || 0}</span>
+                      </div>
+                    </div>
+                    <button
+                      className="text-xs px-2 py-1 rounded-lg border border-rose-200 text-rose-600"
+                      onClick={() => setModal({ type: "post", id: p._id, label: p.author?.username || "пост" })}
+                    >
+                      Удалить
+                    </button>
+                  </div>
+
+                  <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
+                    <input
+                      className="w-20 rounded-lg border border-slate-200 bg-white px-2 py-1"
+                      type="number"
+                      value={draft.likes}
+                      onChange={(e) => setBoostField(p._id, "likes", e.target.value)}
+                      placeholder="Лайки"
+                    />
+                    <input
+                      className="w-20 rounded-lg border border-slate-200 bg-white px-2 py-1"
+                      type="number"
+                      value={draft.comments}
+                      onChange={(e) => setBoostField(p._id, "comments", e.target.value)}
+                      placeholder="Комм"
+                    />
+                    <input
+                      className="w-24 rounded-lg border border-slate-200 bg-white px-2 py-1"
+                      type="number"
+                      value={draft.views}
+                      onChange={(e) => setBoostField(p._id, "views", e.target.value)}
+                      placeholder="Просм"
+                    />
+                    <button
+                      className="px-3 py-1 rounded-lg bg-slate-900 text-white"
+                      onClick={() => applyBoost(p._id)}
+                    >
+                      Применить
+                    </button>
+                    <button
+                      className="px-2 py-1 rounded-lg border border-slate-200"
+                      onClick={() => quickBoost(p._id, 10, 2, 50)}
+                    >
+                      Быстро +10/+2/+50
+                    </button>
+                    <button
+                      className="px-2 py-1 rounded-lg border border-slate-200"
+                      onClick={() => quickBoost(p._id, 100, 10, 500)}
+                    >
+                      Турбо +100/+10/+500
+                    </button>
+                  </div>
                 </div>
-                <button
-                  className="text-xs px-2 py-1 rounded-lg border border-rose-200 text-rose-600"
-                  onClick={() => setModal({ type: "post", id: p._id, label: p.author?.username || "пост" })}
-                >
-                  Удалить
-                </button>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
 

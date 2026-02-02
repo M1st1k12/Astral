@@ -1,6 +1,8 @@
 ﻿import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import useNotificationStore from "../store/notificationStore";
+import { resolveMediaUrl } from "../utils/media";
 
 function getText(n) {
   const from = n?.from?.username || "Кто-то";
@@ -46,7 +48,8 @@ export default function NotificationToasts() {
         id: n._id,
         text: getText(n),
         avatar: n?.from?.avatar || "",
-        createdAt: n?.createdAt
+        createdAt: n?.createdAt,
+        userId: n?.from?._id
       };
       setToasts((prev) => [toast, ...prev].slice(0, 5));
       setTimeout(() => {
@@ -54,8 +57,6 @@ export default function NotificationToasts() {
       }, 4500);
     });
   }, [notifications]);
-
-  const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
@@ -69,17 +70,25 @@ export default function NotificationToasts() {
             transition={{ duration: 0.25, ease: "easeOut" }}
             className="w-72 rounded-2xl border border-slate-200 bg-white shadow-lg p-3 flex items-center gap-3"
           >
-            <div className="h-10 w-10 rounded-full bg-slate-200 overflow-hidden">
+            <Link
+              to={t.userId ? `/user/${t.userId}` : "/profile"}
+              className="h-10 w-10 rounded-full bg-slate-200 overflow-hidden"
+            >
               {t.avatar && (
                 <img
-                  src={baseUrl + t.avatar}
+                  src={resolveMediaUrl(t.avatar)}
                   alt="avatar"
                   className="h-full w-full object-cover"
                 />
               )}
-            </div>
+            </Link>
             <div className="flex-1 min-w-0">
-              <div className="text-sm text-slate-900">{t.text}</div>
+              <Link
+                to={t.userId ? `/user/${t.userId}` : "/profile"}
+                className="text-sm text-slate-900 hover:text-sky-600"
+              >
+                {t.text}
+              </Link>
               <div className="text-xs text-slate-400">
                 {t.createdAt ? new Date(t.createdAt).toLocaleTimeString() : ""}
               </div>

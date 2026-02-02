@@ -14,6 +14,7 @@ import {
   updateClanRole
 } from "../api/extra";
 import api from "../api/http";
+import { resolveMediaUrl } from "../utils/media";
 
 const fade = {
   initial: { opacity: 0, y: 10 },
@@ -198,7 +199,6 @@ export default function Clan() {
   }
 
   const members = data?.members || [];
-  const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
   const isConstellation = !!data?.isConstellation;
   const progress = Math.min(100, Math.round(((data?.count || 0) / 5) * 100));
   const starCount = Math.min(24, data?.count || 0);
@@ -274,7 +274,11 @@ export default function Clan() {
               <div className="relative">
                 <div className="h-20 w-20 rounded-full bg-slate-200 shadow-[0_0_50px_rgba(226,232,240,0.7)] overflow-hidden border border-white/40">
                   {leader?.avatar ? (
-                    <img src={baseUrl + leader.avatar} alt="leader" className="h-full w-full object-cover" />
+                    <img
+                      src={resolveMediaUrl(leader.avatar)}
+                      alt="leader"
+                      className="h-full w-full object-cover"
+                    />
                   ) : null}
                 </div>
                 <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-slate-200/90">
@@ -435,7 +439,11 @@ export default function Clan() {
                   >
                     <div className="h-12 w-12 rounded-full bg-slate-200 overflow-hidden ring-1 ring-slate-200">
                       {m.avatar ? (
-                        <img src={baseUrl + m.avatar} alt={m.username} className="h-full w-full object-cover" />
+                        <img
+                          src={resolveMediaUrl(m.avatar)}
+                          alt={m.username}
+                          className="h-full w-full object-cover"
+                        />
                       ) : null}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -593,3 +601,4 @@ export default function Clan() {
     </motion.div>
   );
 }
+

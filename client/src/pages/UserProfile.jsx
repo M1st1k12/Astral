@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
 import api from "../api/http";
 import PostCard from "../components/PostCard.jsx";
+import { getSocket } from "../api/socket";
+import { resolveMediaUrl } from "../utils/media";
 
 export default function UserProfile() {
   const { id } = useParams();
@@ -24,6 +26,37 @@ export default function UserProfile() {
         setPosts([]);
       });
   }, [id]);
+  useEffect(() => {
+    if (!id || privateBlocked) return;
+    const socket = getSocket();
+    if (!socket) return;
+
+    const handleNew = (post) => {
+      if (!post?._id || post.author?._id !== id) return;
+      setPosts((prev) => (prev.some((p) => p._id === post._id) ? prev : [post, ...prev]));
+    };
+
+    const handleUpdate = (post) => {
+      if (!post?._id) return;
+      setPosts((prev) => prev.map((p) => (p._id === post._id ? post : p)));
+    };
+
+    const handleDelete = (payload) => {
+      const postId = payload?._id || payload;
+      if (!postId) return;
+      setPosts((prev) => prev.filter((p) => p._id !== postId));
+    };
+
+    socket.on("post:new", handleNew);
+    socket.on("post:update", handleUpdate);
+    socket.on("post:delete", handleDelete);
+
+    return () => {
+      socket.off("post:new", handleNew);
+      socket.off("post:update", handleUpdate);
+      socket.off("post:delete", handleDelete);
+    };
+  }, [id, privateBlocked]);
 
   async function toggleFollow() {
     if (isFollowing) {
@@ -41,8 +74,6 @@ export default function UserProfile() {
     }
   }
 
-  const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -58,11 +89,15 @@ export default function UserProfile() {
       >
         <div className="h-36 bg-gradient-to-r from-sky-100 via-slate-100 to-indigo-100 relative">
           {user?.cover && (
-            <img src={baseUrl + user.cover} alt="cover" className="h-full w-full object-cover" />
+            <img src={resolveMediaUrl(user.cover)} alt="cover" className="h-full w-full object-cover" />
           )}
           <div className="absolute -bottom-10 left-6 h-20 w-20 rounded-full border-4 border-white bg-slate-200 overflow-hidden">
             {user?.avatar && (
-              <img src={baseUrl + user.avatar} alt="avatar" className="h-full w-full object-cover" />
+              <img
+                src={resolveMediaUrl(user.avatar)}
+                alt="avatar"
+                className="h-full w-full object-cover"
+              />
             )}
           </div>
         </div>
@@ -121,4 +156,11 @@ export default function UserProfile() {
     </motion.div>
   );
 }
+
+
+
+
+
+
+
 

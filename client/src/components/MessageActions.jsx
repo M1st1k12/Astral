@@ -1,11 +1,9 @@
 ﻿import { useState } from "react";
-import useConversationStore from "../store/conversationStore";
-import { editMessage, deleteMessage, reactMessage } from "../api/extra";
+import { editMessage, deleteMessage } from "../api/extra";
 
 export default function MessageActions({ message }) {
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState(message.content || "");
-  const loadMessages = useConversationStore((s) => s.loadMessages);
 
   async function save() {
     await editMessage(message._id, text);
@@ -14,12 +12,6 @@ export default function MessageActions({ message }) {
 
   async function remove() {
     await deleteMessage(message._id);
-    loadMessages(message.conversation);
-  }
-
-  async function react(emoji) {
-    await reactMessage(message._id, emoji);
-    loadMessages(message.conversation);
   }
 
   return (
@@ -39,8 +31,6 @@ export default function MessageActions({ message }) {
           <button onClick={remove}>Удалить</button>
         </>
       )}
-      <button onClick={() => react("👍")}>👍</button>
-      <button onClick={() => react("🔥")}>🔥</button>
     </div>
   );
 }

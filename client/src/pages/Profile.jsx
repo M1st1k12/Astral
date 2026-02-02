@@ -4,6 +4,8 @@ import useAuthStore from "../store/authStore";
 import api from "../api/http";
 import PostCard from "../components/PostCard.jsx";
 import { getClan } from "../api/extra";
+import { getSocket } from "../api/socket";
+import { resolveMediaUrl } from "../utils/media";
 
 export default function Profile() {
   const user = useAuthStore((s) => s.user);
@@ -28,6 +30,37 @@ export default function Profile() {
         .then((res) => setIsLeader(!!res.isLeader))
         .catch(() => setIsLeader(false));
     }
+  }, [user?._id]);
+  useEffect(() => {
+    if (!user?._id) return;
+    const socket = getSocket();
+    if (!socket) return;
+
+    const handleNew = (post) => {
+      if (!post?._id || post.author?._id !== user._id) return;
+      setPosts((prev) => (prev.some((p) => p._id === post._id) ? prev : [post, ...prev]));
+    };
+
+    const handleUpdate = (post) => {
+      if (!post?._id) return;
+      setPosts((prev) => prev.map((p) => (p._id === post._id ? post : p)));
+    };
+
+    const handleDelete = (payload) => {
+      const postId = payload?._id || payload;
+      if (!postId) return;
+      setPosts((prev) => prev.filter((p) => p._id !== postId));
+    };
+
+    socket.on("post:new", handleNew);
+    socket.on("post:update", handleUpdate);
+    socket.on("post:delete", handleDelete);
+
+    return () => {
+      socket.off("post:new", handleNew);
+      socket.off("post:update", handleUpdate);
+      socket.off("post:delete", handleDelete);
+    };
   }, [user?._id]);
 
   async function saveProfile() {
@@ -58,7 +91,6 @@ export default function Profile() {
     setStatus("Обложка обновлена");
   }
 
-  const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
   const reposts = useMemo(() => posts.filter((p) => p.repostOf), [posts]);
 
   const tabs = [
@@ -82,14 +114,18 @@ export default function Profile() {
         <div className="h-36 bg-gradient-to-r from-sky-100 via-slate-100 to-indigo-100 relative">
           {user?.cover && (
             <img
-              src={baseUrl + user.cover}
+              src={resolveMediaUrl(user.cover)}
               alt="cover"
               className="h-full w-full object-cover"
             />
           )}
           <div className="absolute -bottom-10 left-6 h-20 w-20 rounded-full border-4 border-white bg-slate-200 overflow-hidden">
             {user?.avatar && (
-              <img src={baseUrl + user.avatar} alt="avatar" className="h-full w-full object-cover" />
+              <img
+                src={resolveMediaUrl(user.avatar)}
+                alt="avatar"
+                className="h-full w-full object-cover"
+              />
             )}
           </div>
         </div>
@@ -285,4 +321,6 @@ export default function Profile() {
     </motion.div>
   );
 }
+
+
 
