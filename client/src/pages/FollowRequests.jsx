@@ -29,13 +29,13 @@ export default function FollowRequests() {
       className="max-w-2xl space-y-4"
     >
       <div className="rounded-2xl p-4 bg-white border border-slate-200 shadow-lg">
-        <h2 className="text-lg font-semibold">Запросы на подписку</h2>
-        <p className="text-sm text-slate-500">Кому разрешить доступ к вашему профилю</p>
+        <h2 className="text-lg font-semibold">Follow requests</h2>
+        <p className="text-sm text-slate-500">Who to allow access to your profile</p>
       </div>
 
       {requests.length === 0 && (
         <div className="rounded-2xl p-4 bg-white border border-slate-200 shadow-lg text-slate-500">
-          Нет запросов
+          No requests
         </div>
       )}
 
@@ -59,10 +59,10 @@ export default function FollowRequests() {
           </div>
           <div className="flex items-center gap-2">
             <button className="px-3 py-1 rounded-xl bg-sky-500 text-white" onClick={() => approve(r._id)}>
-              Принять
+              Accept
             </button>
             <button className="px-3 py-1 rounded-xl bg-slate-100" onClick={() => deny(r._id)}>
-              Отклонить
+              Decline
             </button>
           </div>
         </div>

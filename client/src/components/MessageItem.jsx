@@ -72,11 +72,11 @@ export default function MessageItem({ message }) {
           </div>
         )}
         <p className="text-sm text-slate-900">
-          {message.content || (message.deletedAt ? "Сообщение удалено" : "")}
+          {message.content || (message.deletedAt ? "Message deleted" : "")}
         </p>
         <div className="mt-1 flex items-center justify-between text-xs text-slate-400">
           <span>{new Date(message.createdAt).toLocaleTimeString()}</span>
-          {isOwn && <span>{message.seen ? "Прочитано" : "Отправлено"}</span>}
+          {isOwn && <span>{message.seen ? "Read" : "Sent"}</span>}
         </div>
         {message.reactions?.length > 0 && (
           <motion.div
@@ -94,7 +94,7 @@ export default function MessageItem({ message }) {
                 key={emoji}
                 className="h-7 w-7 rounded-full border border-slate-200 hover:bg-slate-50"
                 onClick={() => react(emoji)}
-                title="Реакция"
+                title="Reaction"
               >
                 {emoji}
               </button>

@@ -24,7 +24,7 @@ export default function Feed() {
       setPosts(data.posts);
       setLastUpdated(new Date());
     } catch (err) {
-      setError(err.response?.data?.message || "Не удалось обновить ленту");
+      setError(err.response?.data?.message || "Failed to refresh feed");
     } finally {
       if (!silent) setRefreshing(false);
     }
@@ -114,7 +114,7 @@ export default function Feed() {
           }`}
           onClick={() => setTab("for-you")}
         >
-          Популярное
+          Popular
         </button>
         <button
           className={`px-4 py-2 rounded-xl text-sm ${
@@ -122,7 +122,7 @@ export default function Feed() {
           }`}
           onClick={() => setTab("following")}
         >
-          Подписки
+          Following
         </button>
         <div className="sm:ml-auto flex items-center gap-2 text-xs text-slate-400">
           <button
@@ -130,12 +130,12 @@ export default function Feed() {
             onClick={() => loadFeed(tab)}
             disabled={refreshing}
           >
-            {refreshing ? "Обновляю..." : "Обновить"}
+            {refreshing ? "Refreshing..." : "Refresh"}
           </button>
           <span>
             {lastUpdated
-              ? `Обновлено: ${lastUpdated.toLocaleTimeString()}`
-              : "Обновлено сейчас"}
+              ? `Updated: ${lastUpdated.toLocaleTimeString()}`
+              : "Updated just now"}
           </span>
         </div>
       </motion.div>
@@ -170,3 +170,4 @@ export default function Feed() {
     </motion.div>
   );
 }
+

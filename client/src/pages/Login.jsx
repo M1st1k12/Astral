@@ -17,8 +17,8 @@ export default function Login() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold">Вход в Astral</h1>
-      <p className="text-slate-500 text-sm">Добро пожаловать обратно.</p>
+      <h1 className="text-2xl font-semibold">Sign in to Astral</h1>
+      <p className="text-slate-500 text-sm">Welcome back.</p>
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">
         <input
           type="email"
@@ -30,7 +30,7 @@ export default function Login() {
         <input
           type="password"
           className="w-full rounded-xl bg-slate-50 border border-slate-200 focus:border-sky-400 focus:ring-0"
-          placeholder="Пароль"
+          placeholder="Password"
           value={form.password}
           onChange={(e) => setForm({ ...form, password: e.target.value })}
         />
@@ -40,11 +40,11 @@ export default function Login() {
           className="w-full py-2 rounded-xl bg-sky-500 text-white font-semibold"
           type="submit"
         >
-          {loading ? "Загрузка..." : "Войти"}
+          {loading ? "Loading..." : "Sign in"}
         </button>
       </form>
       <p className="text-sm text-slate-500 mt-4">
-        Нет аккаунта? <Link className="text-sky-600" to="/register">Создать</Link>
+        Don't have an account? <Link className="text-sky-600" to="/register">Create</Link>
       </p>
     </div>
   );

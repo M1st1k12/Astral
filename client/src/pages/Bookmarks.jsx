@@ -18,12 +18,12 @@ export default function Bookmarks() {
       className="max-w-2xl space-y-4"
     >
       <div className="rounded-2xl p-4 bg-white border border-slate-200 shadow-lg">
-        <h2 className="text-lg font-semibold">Закладки</h2>
-        <p className="text-sm text-slate-500">Сохраненные посты</p>
+        <h2 className="text-lg font-semibold">Bookmarks</h2>
+        <p className="text-sm text-slate-500">Saved posts</p>
       </div>
       {posts.length === 0 && (
         <div className="rounded-2xl p-4 bg-white border border-slate-200 shadow-lg text-slate-500">
-          Пусто
+          Empty
         </div>
       )}
       {posts.map((post) => (

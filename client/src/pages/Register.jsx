@@ -17,20 +17,20 @@ export default function Register() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold">Создать Astral ID</h1>
-      <p className="text-slate-500 text-sm">Присоединяйся к созвездию.</p>
+      <h1 className="text-2xl font-semibold">Create Astral ID</h1>
+      <p className="text-slate-500 text-sm">Join the constellation.</p>
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">
         <input
           type="text"
           className="w-full rounded-xl bg-slate-50 border border-slate-200 focus:border-sky-400 focus:ring-0"
-          placeholder="Юзернейм (без @)"
+          placeholder="Username (without @)"
           value={form.userTag}
           onChange={(e) => setForm({ ...form, userTag: e.target.value.toLowerCase() })}
         />
         <input
           type="text"
           className="w-full rounded-xl bg-slate-50 border border-slate-200 focus:border-sky-400 focus:ring-0"
-          placeholder="Имя"
+          placeholder="Name"
           value={form.username}
           onChange={(e) => setForm({ ...form, username: e.target.value })}
         />
@@ -44,7 +44,7 @@ export default function Register() {
         <input
           type="password"
           className="w-full rounded-xl bg-slate-50 border border-slate-200 focus:border-sky-400 focus:ring-0"
-          placeholder="Пароль"
+          placeholder="Password"
           value={form.password}
           onChange={(e) => setForm({ ...form, password: e.target.value })}
         />
@@ -54,11 +54,11 @@ export default function Register() {
           className="w-full py-2 rounded-xl bg-sky-500 text-white font-semibold"
           type="submit"
         >
-          {loading ? "Загрузка..." : "Создать"}
+          {loading ? "Loading..." : "Create"}
         </button>
       </form>
       <p className="text-sm text-slate-500 mt-4">
-        Уже есть аккаунт? <Link className="text-sky-600" to="/login">Войти</Link>
+        Already have an account? <Link className="text-sky-600" to="/login">Sign in</Link>
       </p>
     </div>
   );

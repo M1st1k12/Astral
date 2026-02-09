@@ -5,24 +5,24 @@ import useNotificationStore from "../store/notificationStore";
 import { resolveMediaUrl } from "../utils/media";
 
 function getText(n) {
-  const from = n?.from?.username || "Кто-то";
+  const from = n?.from?.username || "Someone";
   switch (n.type) {
     case "like":
-      return `${from} поставил(а) лайк`;
+      return `${from} liked your post`;
     case "comment":
-      return `${from} оставил(а) комментарий`;
+      return `${from} commented on your post`;
     case "follow":
-      return `${from} подписался(ась)`;
+      return `${from} followed you`;
     case "follow_request":
-      return `${from} запросил(а) подписку`;
+      return `${from} requested to follow you`;
     case "follow_approved":
-      return `${from} одобрил(а) запрос`;
+      return `${from} approved your request`;
     case "repost":
-      return `${from} сделал(а) репост`;
+      return `${from} reposted your post`;
     case "message":
-      return `${from} написал(а) сообщение`;
+      return `${from} sent you a message`;
     default:
-      return "Новое уведомление";
+      return "New notification";
   }
 }
 

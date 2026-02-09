@@ -18,12 +18,12 @@ export default function Hidden() {
       className="max-w-2xl space-y-4"
     >
       <div className="rounded-2xl p-4 bg-white border border-slate-200 shadow-lg">
-        <h2 className="text-lg font-semibold">Скрытые</h2>
-        <p className="text-sm text-slate-500">Посты, которые вы скрыли</p>
+        <h2 className="text-lg font-semibold">Hidden</h2>
+        <p className="text-sm text-slate-500">Posts you hid</p>
       </div>
       {posts.length === 0 && (
         <div className="rounded-2xl p-4 bg-white border border-slate-200 shadow-lg text-slate-500">
-          Пусто
+          Empty
         </div>
       )}
       {posts.map((post) => (

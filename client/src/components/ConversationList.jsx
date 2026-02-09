@@ -57,15 +57,15 @@ export default function ConversationList() {
       <div className="flex items-center gap-3">
         <div className="h-10 w-10 rounded-xl bg-slate-900 text-white grid place-items-center">💬</div>
         <div>
-          <p className="text-sm text-slate-500">Сообщения</p>
-          <p className="text-lg font-semibold">Диалоги</p>
+          <p className="text-sm text-slate-500">Messages</p>
+          <p className="text-lg font-semibold">Conversations</p>
         </div>
       </div>
 
       <div className="mt-4">
         <input
           className="w-full rounded-xl bg-slate-50 border border-slate-200 focus:border-sky-400 focus:ring-0"
-          placeholder="Поиск пользователей..."
+          placeholder="Search users..."
           value={query}
           onChange={handleSearch}
         />
@@ -97,7 +97,7 @@ export default function ConversationList() {
       </div>
 
       <div className="mt-6">
-        <p className="text-xs uppercase tracking-widest text-slate-400">Диалоги</p>
+        <p className="text-xs uppercase tracking-widest text-slate-400">Conversations</p>
         <div className="mt-3 space-y-2">
           {conversations.map((conversation) => {
             const other = conversation.participants.find((p) => p._id !== user?._id);
@@ -131,11 +131,11 @@ export default function ConversationList() {
                           other?.status === "online" ? "text-emerald-600" : "text-slate-400"
                         }`}
                       >
-                        {other?.status === "online" ? "в сети" : "офлайн"}
+                        {other?.status === "online" ? "online" : "offline"}
                       </span>
                     </div>
                     <p className="text-xs text-slate-400 truncate">
-                      {conversation.lastMessage?.content || "Нет сообщений"}
+                      {conversation.lastMessage?.content || "No messages"}
                     </p>
                   </button>
                 </div>
@@ -144,14 +144,14 @@ export default function ConversationList() {
                     className="text-xs px-2 py-1 rounded-lg border border-slate-200"
                     onClick={() => handleDeleteConversation(conversation._id)}
                   >
-                    Удалить
+                    Delete
                   </button>
                   {other?._id && (
                     <button
                       className="text-xs px-2 py-1 rounded-lg border border-rose-200 text-rose-600"
                       onClick={() => handleBlockUser(other._id)}
                     >
-                      Блокировать
+                      Block
                     </button>
                   )}
                 </div>

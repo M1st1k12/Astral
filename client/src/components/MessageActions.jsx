@@ -23,12 +23,12 @@ export default function MessageActions({ message }) {
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
-          <button className="text-sky-600" onClick={save}>Сохранить</button>
+          <button className="text-sky-600" onClick={save}>Save</button>
         </>
       ) : (
         <>
-          <button onClick={() => setEditing(true)}>Редактировать</button>
-          <button onClick={remove}>Удалить</button>
+          <button onClick={() => setEditing(true)}>Edit</button>
+          <button onClick={remove}>Delete</button>
         </>
       )}
     </div>

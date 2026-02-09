@@ -66,7 +66,7 @@ export default function Profile() {
   async function saveProfile() {
     const { data } = await api.put("/users/me", { username, userTag, bio, isPrivate, clan });
     setUser?.(data.user);
-    setStatus("Профиль обновлен");
+    setStatus("Profile updated");
   }
 
   async function uploadAvatar() {
@@ -77,7 +77,7 @@ export default function Profile() {
       headers: { "Content-Type": "multipart/form-data" }
     });
     setUser?.(data.user);
-    setStatus("Аватар обновлен");
+    setStatus("Avatar updated");
   }
 
   async function uploadCover() {
@@ -88,14 +88,14 @@ export default function Profile() {
       headers: { "Content-Type": "multipart/form-data" }
     });
     setUser?.(data.user);
-    setStatus("Обложка обновлена");
+    setStatus("Cover updated");
   }
 
   const reposts = useMemo(() => posts.filter((p) => p.repostOf), [posts]);
 
   const tabs = [
-    { id: "posts", label: "Мои", count: posts.length },
-    { id: "reposts", label: "Репосты", count: reposts.length }
+    { id: "posts", label: "Mine", count: posts.length },
+    { id: "reposts", label: "Reposts", count: reposts.length }
   ];
 
   return (
@@ -137,11 +137,11 @@ export default function Profile() {
               {user?.clan && (
                 <div className="mt-2 flex flex-wrap items-center gap-2">
                   <span className="inline-flex items-center text-xs px-2 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-100">
-                    Клан: {user.clan}
+                    Clan: {user.clan}
                   </span>
                   {isLeader && (
                     <span className="inline-flex items-center text-xs px-2 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
-                      Лидер клана
+                      Clan leader
                     </span>
                   )}
                 </div>
@@ -151,15 +151,15 @@ export default function Profile() {
             <div className="flex gap-4 text-center">
               <div>
                 <p className="text-lg font-semibold">{user?.followers?.length || 0}</p>
-                <p className="text-xs text-slate-500">Подписчики</p>
+                <p className="text-xs text-slate-500">Followers</p>
               </div>
               <div>
                 <p className="text-lg font-semibold">{user?.following?.length || 0}</p>
-                <p className="text-xs text-slate-500">Подписки</p>
+                <p className="text-xs text-slate-500">Following</p>
               </div>
               <div>
                 <p className="text-lg font-semibold">{posts.length}</p>
-                <p className="text-xs text-slate-500">Посты</p>
+                <p className="text-xs text-slate-500">Posts</p>
               </div>
             </div>
           </div>
@@ -172,12 +172,12 @@ export default function Profile() {
         transition={{ duration: 0.25 }}
         className="rounded-2xl p-6 bg-white border border-slate-200 shadow-lg"
       >
-        <h3 className="text-lg font-semibold">Настройки</h3>
-        <p className="text-sm text-slate-500">Публичные данные и приватность.</p>
+        <h3 className="text-lg font-semibold">Settings</h3>
+        <p className="text-sm text-slate-500">Public data and privacy.</p>
 
         <div className="mt-6 space-y-4">
           <div>
-            <label className="text-xs text-slate-500">Юзернейм</label>
+            <label className="text-xs text-slate-500">Username</label>
             <input
               className="w-full rounded-xl bg-slate-50 border border-slate-200 focus:border-sky-400 focus:ring-0"
               value={userTag}
@@ -185,7 +185,7 @@ export default function Profile() {
             />
           </div>
           <div>
-            <label className="text-xs text-slate-500">Ник</label>
+            <label className="text-xs text-slate-500">Display name</label>
             <input
               className="w-full rounded-xl bg-slate-50 border border-slate-200 focus:border-sky-400 focus:ring-0"
               value={username}
@@ -193,7 +193,7 @@ export default function Profile() {
             />
           </div>
           <div>
-            <label className="text-xs text-slate-500">О себе</label>
+            <label className="text-xs text-slate-500">About</label>
             <textarea
               className="w-full rounded-xl bg-slate-50 border border-slate-200 focus:border-sky-400 focus:ring-0"
               value={bio}
@@ -201,7 +201,7 @@ export default function Profile() {
             />
           </div>
           <div>
-            <label className="text-xs text-slate-500">Клан</label>
+            <label className="text-xs text-slate-500">Clan</label>
             <input
               className="w-full rounded-xl bg-slate-50 border border-slate-200 focus:border-sky-400 focus:ring-0"
               value={clan}
@@ -214,17 +214,17 @@ export default function Profile() {
               checked={isPrivate}
               onChange={(e) => setIsPrivate(e.target.checked)}
             />
-            Приватный профиль
+            Private profile
           </label>
           <button className="px-4 py-2 rounded-xl bg-sky-500 text-white hover:bg-sky-600 transition transform hover:-translate-y-0.5 active:translate-y-0" onClick={saveProfile}>
-            Сохранить
+            Save
           </button>
 
           <div>
-            <label className="text-xs text-slate-500">Аватар</label>
+            <label className="text-xs text-slate-500">Avatar</label>
             <div className="mt-2 flex items-center gap-3">
               <label className="px-3 py-2 rounded-lg bg-slate-100 border border-slate-200 text-sm cursor-pointer hover:bg-slate-200 transition transform hover:-translate-y-0.5 active:translate-y-0">
-                Выбрать файл
+                Choose file
                 <input
                   type="file"
                   className="hidden"
@@ -232,22 +232,22 @@ export default function Profile() {
                 />
               </label>
               <span className="text-sm text-slate-500">
-                {avatar?.name || "Файл не выбран"}
+                {avatar?.name || "No file selected"}
               </span>
               <button
                 className="ml-auto px-4 py-2 rounded-xl bg-sky-500 text-white hover:bg-sky-600 transition transform hover:-translate-y-0.5 active:translate-y-0"
                 onClick={uploadAvatar}
               >
-                Загрузить
+                Upload
               </button>
             </div>
           </div>
 
           <div>
-            <label className="text-xs text-slate-500">Обложка</label>
+            <label className="text-xs text-slate-500">Cover</label>
             <div className="mt-2 flex items-center gap-3">
               <label className="px-3 py-2 rounded-lg bg-slate-100 border border-slate-200 text-sm cursor-pointer hover:bg-slate-200 transition transform hover:-translate-y-0.5 active:translate-y-0">
-                Выбрать файл
+                Choose file
                 <input
                   type="file"
                   className="hidden"
@@ -255,13 +255,13 @@ export default function Profile() {
                 />
               </label>
               <span className="text-sm text-slate-500">
-                {cover?.name || "Файл не выбран"}
+                {cover?.name || "No file selected"}
               </span>
               <button
                 className="ml-auto px-4 py-2 rounded-xl bg-sky-500 text-white hover:bg-sky-600 transition transform hover:-translate-y-0.5 active:translate-y-0"
                 onClick={uploadCover}
               >
-                Загрузить
+                Upload
               </button>
             </div>
           </div>
@@ -293,7 +293,7 @@ export default function Profile() {
         <div className="space-y-4">
           {reposts.length === 0 ? (
             <div className="rounded-2xl p-4 bg-white border border-slate-200 shadow-lg text-slate-500">
-              Нет репостов
+              No reposts
             </div>
           ) : (
             reposts.map((post) => <PostCard key={post._id} post={post} />)
@@ -305,7 +305,7 @@ export default function Profile() {
         <div className="space-y-4">
           {posts.length === 0 ? (
             <div className="rounded-2xl p-4 bg-white border border-slate-200 shadow-lg text-slate-500">
-              Пока нет постов
+              No posts yet
             </div>
           ) : (
             posts.map((post) => (

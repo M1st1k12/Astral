@@ -21,7 +21,7 @@ function Modal({ open, title, description, confirmText, onClose, onConfirm, dang
             className="px-4 py-2 rounded-xl border border-slate-200 text-sm"
             onClick={onClose}
           >
-            Отмена
+            Cancel
           </button>
           <button
             className={`px-4 py-2 rounded-xl text-sm text-white ${
@@ -136,8 +136,8 @@ export default function Admin() {
   if (!user?.isAdmin) {
     return (
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-lg">
-        <h2 className="text-lg font-semibold">Доступ запрещён</h2>
-        <p className="text-sm text-slate-500">Эта страница доступна только администраторам.</p>
+        <h2 className="text-lg font-semibold">Access denied</h2>
+        <p className="text-sm text-slate-500">This page is available to administrators only.</p>
       </div>
     );
   }
@@ -150,25 +150,25 @@ export default function Admin() {
       className="max-w-5xl space-y-4"
     >
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-lg">
-        <h2 className="text-xl font-semibold">Админ‑панель</h2>
-        <p className="text-sm text-slate-500">Доступ только для администраторов.</p>
+        <h2 className="text-xl font-semibold">Admin Panel</h2>
+        <p className="text-sm text-slate-500">Access for administrators only.</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-lg">
-          <div className="text-xs text-slate-500">Пользователей</div>
+          <div className="text-xs text-slate-500">Users</div>
           <div className="text-2xl font-semibold">{overview?.users ?? "—"}</div>
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-lg">
-          <div className="text-xs text-slate-500">Постов</div>
+          <div className="text-xs text-slate-500">Posts</div>
           <div className="text-2xl font-semibold">{overview?.posts ?? "—"}</div>
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-lg">
-          <div className="text-xs text-slate-500">Кланов</div>
+          <div className="text-xs text-slate-500">Clans</div>
           <div className="text-2xl font-semibold">{overview?.clans ?? "—"}</div>
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-lg">
-          <div className="text-xs text-slate-500">Заявок в кланы</div>
+          <div className="text-xs text-slate-500">Clan requests</div>
           <div className="text-2xl font-semibold">{overview?.joinRequests ?? "—"}</div>
         </div>
       </div>
@@ -176,9 +176,9 @@ export default function Admin() {
       <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-lg">
         <div className="flex flex-wrap items-center gap-2">
           {[
-            { id: "users", label: "Пользователи" },
-            { id: "posts", label: "Посты" },
-            { id: "clans", label: "Кланы" }
+            { id: "users", label: "Users" },
+            { id: "posts", label: "Posts" },
+            { id: "clans", label: "Clans" }
           ].map((t) => (
             <button
               key={t.id}
@@ -194,7 +194,7 @@ export default function Admin() {
           ))}
           {tab === "posts" && (
             <div className="flex items-center gap-2 ml-2 text-xs text-slate-500">
-              <span>Накрутка:</span>
+              <span>Boost:</span>
               <button
                 className={`px-2 py-1 rounded-lg border ${boostMode === "set" ? "bg-slate-900 text-white border-slate-900" : "border-slate-200"}`}
                 onClick={() => setBoostMode("set")}
@@ -211,7 +211,7 @@ export default function Admin() {
           )}
           <input
             className="ml-auto w-56 rounded-xl bg-slate-50 border border-slate-200 focus:border-sky-400 focus:ring-0 text-sm"
-            placeholder="Поиск..."
+            placeholder="Search..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
@@ -224,12 +224,12 @@ export default function Admin() {
             <table className="w-full text-sm">
               <thead className="text-xs text-slate-500">
                 <tr>
-                  <th className="text-left p-2">Пользователь</th>
-                  <th className="text-left p-2">Юзернейм</th>
+                  <th className="text-left p-2">User</th>
+                  <th className="text-left p-2">Username</th>
                   <th className="text-left p-2">Email</th>
-                  <th className="text-left p-2">Клан</th>
-                  <th className="text-left p-2">Админ</th>
-                  <th className="text-right p-2">Действия</th>
+                  <th className="text-left p-2">Clan</th>
+                  <th className="text-left p-2">Admin</th>
+                  <th className="text-right p-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -246,7 +246,7 @@ export default function Admin() {
                         }`}
                         onClick={() => toggleAdmin(u._id, !u.isAdmin)}
                       >
-                        {u.isAdmin ? "Да" : "Нет"}
+                        {u.isAdmin ? "Yes" : "No"}
                       </button>
                     </td>
                     <td className="p-2 text-right">
@@ -254,7 +254,7 @@ export default function Admin() {
                         className="text-xs px-2 py-1 rounded-lg border border-rose-200 text-rose-600"
                         onClick={() => setModal({ type: "user", id: u._id, label: u.username })}
                       >
-                        Удалить
+                        Delete
                       </button>
                     </td>
                   </tr>
@@ -275,9 +275,9 @@ export default function Admin() {
                 <div key={p._id} className="rounded-xl border border-slate-200 bg-slate-50 p-3">
                   <div className="flex items-center justify-between gap-3">
                     <div className="text-sm text-slate-700">
-                      <span className="font-semibold">{p.author?.username || "Автор"}</span>
+                      <span className="font-semibold">{p.author?.username || "Author"}</span>
                       <span className="text-xs text-slate-500 ml-2">{new Date(p.createdAt).toLocaleString()}</span>
-                      <div className="text-xs text-slate-500 truncate max-w-[520px]">{p.content || "(без текста)"}</div>
+                      <div className="text-xs text-slate-500 truncate max-w-[520px]">{p.content || "(no text)"}</div>
                       <div className="mt-2 text-xs text-slate-500 flex items-center gap-3">
                         <span>👍 {likeCount}</span>
                         <span>💬 {commentCount}</span>
@@ -287,9 +287,9 @@ export default function Admin() {
                     </div>
                     <button
                       className="text-xs px-2 py-1 rounded-lg border border-rose-200 text-rose-600"
-                      onClick={() => setModal({ type: "post", id: p._id, label: p.author?.username || "пост" })}
+                      onClick={() => setModal({ type: "post", id: p._id, label: p.author?.username || "post" })}
                     >
-                      Удалить
+                      Delete
                     </button>
                   </div>
 
@@ -299,39 +299,39 @@ export default function Admin() {
                       type="number"
                       value={draft.likes}
                       onChange={(e) => setBoostField(p._id, "likes", e.target.value)}
-                      placeholder="Лайки"
+                      placeholder="Likes"
                     />
                     <input
                       className="w-20 rounded-lg border border-slate-200 bg-white px-2 py-1"
                       type="number"
                       value={draft.comments}
                       onChange={(e) => setBoostField(p._id, "comments", e.target.value)}
-                      placeholder="Комм"
+                      placeholder="Comments"
                     />
                     <input
                       className="w-24 rounded-lg border border-slate-200 bg-white px-2 py-1"
                       type="number"
                       value={draft.views}
                       onChange={(e) => setBoostField(p._id, "views", e.target.value)}
-                      placeholder="Просм"
+                      placeholder="Views"
                     />
                     <button
                       className="px-3 py-1 rounded-lg bg-slate-900 text-white"
                       onClick={() => applyBoost(p._id)}
                     >
-                      Применить
+                      Apply
                     </button>
                     <button
                       className="px-2 py-1 rounded-lg border border-slate-200"
                       onClick={() => quickBoost(p._id, 10, 2, 50)}
                     >
-                      Быстро +10/+2/+50
+                      Quick +10/+2/+50
                     </button>
                     <button
                       className="px-2 py-1 rounded-lg border border-slate-200"
                       onClick={() => quickBoost(p._id, 100, 10, 500)}
                     >
-                      Турбо +100/+10/+500
+                      Turbo +100/+10/+500
                     </button>
                   </div>
                 </div>
@@ -346,14 +346,14 @@ export default function Admin() {
               <div key={c._id} className="rounded-xl border border-slate-200 bg-slate-50 p-3 flex items-center justify-between">
                 <div className="text-sm text-slate-700">
                   <span className="font-semibold">{c.name}</span>
-                  <span className="text-xs text-slate-500 ml-2">лидер: {c.leader?.username || "—"}</span>
-                  <span className="text-xs text-slate-500 ml-2">{c.isPrivate ? "приватный" : "публичный"}</span>
+                  <span className="text-xs text-slate-500 ml-2">leader: {c.leader?.username || "—"}</span>
+                  <span className="text-xs text-slate-500 ml-2">{c.isPrivate ? "private" : "public"}</span>
                 </div>
                 <button
                   className="text-xs px-2 py-1 rounded-lg border border-rose-200 text-rose-600"
                   onClick={() => setModal({ type: "clan", id: c._id, label: c.name })}
                 >
-                  Удалить
+                  Delete
                 </button>
               </div>
             ))}
@@ -365,9 +365,9 @@ export default function Admin() {
         {modal?.type === "user" && (
           <Modal
             open
-            title="Удалить пользователя"
-            description={`Удалить пользователя ${modal.label}?`}
-            confirmText="Удалить"
+            title="Delete user"
+            description={`Delete user ${modal.label}?`}
+            confirmText="Delete"
             danger
             onClose={() => setModal(null)}
             onConfirm={() => {
@@ -379,9 +379,9 @@ export default function Admin() {
         {modal?.type === "post" && (
           <Modal
             open
-            title="Удалить пост"
-            description="Удалить пост без возможности восстановления?"
-            confirmText="Удалить"
+            title="Delete post"
+            description="Delete post without recovery?"
+            confirmText="Delete"
             danger
             onClose={() => setModal(null)}
             onConfirm={() => {
@@ -393,9 +393,9 @@ export default function Admin() {
         {modal?.type === "clan" && (
           <Modal
             open
-            title="Удалить клан"
-            description={`Удалить клан ${modal.label}?`}
-            confirmText="Удалить"
+            title="Delete clan"
+            description={`Delete clan ${modal.label}?`}
+            confirmText="Delete"
             danger
             onClose={() => setModal(null)}
             onConfirm={() => {

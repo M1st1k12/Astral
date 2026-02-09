@@ -35,7 +35,7 @@ export default function Search() {
           <div className="h-10 w-10 rounded-xl bg-slate-900 text-white grid place-items-center">??</div>
           <input
             className="w-full rounded-xl bg-slate-50 border border-slate-200 focus:border-sky-400 focus:ring-0"
-            placeholder="Поиск пользователей и хэштегов"
+            placeholder="Search users and hashtags"
             value={query}
             onChange={handleSearch}
           />
@@ -44,7 +44,7 @@ export default function Search() {
 
       {data.hashtags.length > 0 && (
         <motion.div {...fadeUp} className="rounded-2xl p-4 bg-white border border-slate-200 shadow-lg">
-          <h3 className="text-lg font-semibold">Популярные хэштеги</h3>
+          <h3 className="text-lg font-semibold">Trending hashtags</h3>
           <div className="mt-3 flex flex-wrap gap-2">
             {data.hashtags.map((h) => (
               <div
@@ -61,7 +61,7 @@ export default function Search() {
 
       {data.users.length > 0 && (
         <motion.div {...fadeUp} className="rounded-2xl p-4 bg-white border border-slate-200 shadow-lg">
-          <h3 className="text-lg font-semibold">Пользователи</h3>
+          <h3 className="text-lg font-semibold">Users</h3>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {data.users.map((u) => (
               <Link
@@ -78,7 +78,7 @@ export default function Search() {
                   <div className="text-sm font-semibold text-slate-900 group-hover:text-slate-950">
                     {u.username}
                   </div>
-                  <div className="text-xs text-slate-500">Перейти в профиль</div>
+                  <div className="text-xs text-slate-500">View profile</div>
                 </div>
                 <div className="text-xs text-slate-500">→</div>
               </Link>

@@ -53,7 +53,7 @@ export default function PostComposer({ onCreated }) {
         <div className="h-10 w-10 rounded-full bg-slate-200" />
         <textarea
           className="w-full rounded-2xl bg-slate-50 border border-slate-200 focus:border-sky-400 focus:ring-0 min-h-[90px] p-3"
-          placeholder="Что нового?"
+          placeholder="What's new?"
           value={content}
           onChange={(e) => setContent(e.target.value)}
         />
@@ -64,7 +64,7 @@ export default function PostComposer({ onCreated }) {
             type="button"
             onClick={() => fileRef.current?.click()}
             className="h-9 w-9 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 transition flex items-center justify-center"
-            title="Прикрепить файл"
+            title="Attach file"
           >
             📎
           </button>
@@ -72,13 +72,13 @@ export default function PostComposer({ onCreated }) {
             type="button"
             onClick={() => setShowDraw(true)}
             className="h-9 w-9 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 transition flex items-center justify-center"
-            title="Открыть рисование"
+            title="Open drawing"
           >
             🎨
           </button>
 
           <label className="px-2 py-1 rounded-md bg-slate-100 border border-slate-200 text-sm cursor-pointer hover:bg-slate-200 transition transform hover:-translate-y-0.5 active:translate-y-0">
-            Выбрать файл
+            Choose file
             <input
               ref={fileRef}
               type="file"
@@ -87,7 +87,7 @@ export default function PostComposer({ onCreated }) {
             />
           </label>
           <span className="text-sm text-slate-500 truncate max-w-[180px] sm:max-w-[260px]">
-            {media?.name || "Файл не выбран"}
+            {media?.name || "No file selected"}
           </span>
         </div>
         <div className="hidden md:flex items-center gap-1 text-slate-500">
@@ -97,7 +97,7 @@ export default function PostComposer({ onCreated }) {
               type="button"
               className="h-8 w-8 rounded-full hover:bg-slate-100 transition"
               onClick={() => setContent((prev) => `${prev} ${e}`)}
-              title="Добавить эмодзи"
+              title="Add emoji"
             >
               {e}
             </button>
@@ -108,16 +108,16 @@ export default function PostComposer({ onCreated }) {
           disabled={loading}
           className="w-full sm:w-auto px-4 py-2 rounded-full bg-sky-400 text-white font-semibold hover:bg-sky-500 transition transform hover:-translate-y-0.5 active:translate-y-0"
         >
-          {loading ? "Публикую..." : "Опубликовать"}
+          {loading ? "Posting..." : "Post"}
         </button>
       </div>
 
       {showDraw && (
         <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-3">
           <div className="flex items-center gap-2 mb-2">
-            <label className="text-xs text-slate-500">Цвет</label>
+            <label className="text-xs text-slate-500">Color</label>
             <input type="color" value={stroke} onChange={(e) => setStroke(e.target.value)} />
-            <label className="text-xs text-slate-500 ml-2">Толщина</label>
+            <label className="text-xs text-slate-500 ml-2">Thickness</label>
             <input
               type="range"
               min="1"
@@ -136,7 +136,7 @@ export default function PostComposer({ onCreated }) {
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
               }}
             >
-              Очистить
+              Clear
             </button>
             <button
               type="button"
@@ -151,7 +151,7 @@ export default function PostComposer({ onCreated }) {
                 }, "image/png");
               }}
             >
-              Добавить
+              Add
             </button>
           </div>
           <canvas

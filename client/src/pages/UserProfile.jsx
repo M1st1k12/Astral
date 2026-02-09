@@ -108,7 +108,7 @@ export default function UserProfile() {
               <p className="text-sm text-slate-500">@{user?.userTag || user?.username}</p>
               {user?.clan && (
                 <span className="inline-flex items-center mt-2 text-xs px-2 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-100">
-                  Клан: {user.clan}
+                  Clan: {user.clan}
                 </span>
               )}
               <p className="text-sm text-slate-600 mt-2">{user?.bio}</p>
@@ -116,22 +116,22 @@ export default function UserProfile() {
             <div className="flex gap-4 text-center">
               <div>
                 <p className="text-lg font-semibold">{user?.followers?.length || 0}</p>
-                <p className="text-xs text-slate-500">Подписчики</p>
+                <p className="text-xs text-slate-500">Followers</p>
               </div>
               <div>
                 <p className="text-lg font-semibold">{user?.following?.length || 0}</p>
-                <p className="text-xs text-slate-500">Подписки</p>
+                <p className="text-xs text-slate-500">Following</p>
               </div>
               <div>
                 <p className="text-lg font-semibold">{posts.length}</p>
-                <p className="text-xs text-slate-500">Посты</p>
+                <p className="text-xs text-slate-500">Posts</p>
               </div>
             </div>
             <button
               onClick={toggleFollow}
               className="px-4 py-2 rounded-xl bg-sky-500 text-white"
             >
-              {requested ? "Запрошено" : isFollowing ? "Отписаться" : "Подписаться"}
+              {requested ? "Requested" : isFollowing ? "Unfollow" : "Follow"}
             </button>
           </div>
         </div>
@@ -139,11 +139,11 @@ export default function UserProfile() {
 
       {privateBlocked ? (
         <div className="rounded-2xl p-4 bg-white border border-slate-200 shadow-lg text-slate-500">
-          Этот профиль приватный. Ожидайте подтверждения.
+          This profile is private. Await approval.
         </div>
       ) : (
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Посты</h3>
+          <h3 className="text-lg font-semibold">Posts</h3>
           {posts.map((post) => (
             <PostCard
               key={post._id}

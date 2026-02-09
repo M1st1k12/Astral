@@ -40,7 +40,7 @@ function Modal({ open, title, description, confirmText, onClose, onConfirm, dang
             className="px-4 py-2 rounded-xl border border-slate-200 text-sm"
             onClick={onClose}
           >
-            Отмена
+            Cancel
           </button>
           <button
             className={`px-4 py-2 rounded-xl text-sm text-white ${
@@ -95,7 +95,7 @@ export default function Clan() {
       const res = await getClan(clanName);
       setData(res);
     } catch (err) {
-      setError("Не удалось загрузить клан");
+      setError("Failed to load clan");
     } finally {
       setLoading(false);
     }
@@ -142,7 +142,7 @@ export default function Clan() {
       setUser?.({ ...user, clan: "", clanRole: "" });
       setData(null);
     } catch (err) {
-      setError(err.response?.data?.message || "Не удалось выйти из клана");
+      setError(err.response?.data?.message || "Failed to leave clan");
     }
   }
 
@@ -155,7 +155,7 @@ export default function Clan() {
         members: prev.members.map((m) => (m._id === memberId ? { ...m, clanRole: role } : m))
       }));
     } catch (err) {
-      setError(err.response?.data?.message || "Не удалось изменить роль");
+      setError(err.response?.data?.message || "Failed to change role");
     }
   }
 
@@ -165,7 +165,7 @@ export default function Clan() {
       await inviteToClan(data.clan, inviteName.trim());
       setInviteName("");
     } catch (err) {
-      setError(err.response?.data?.message || "Не удалось отправить приглашение");
+      setError(err.response?.data?.message || "Failed to send invite");
     }
   }
 
@@ -184,7 +184,7 @@ export default function Clan() {
   async function handleJoinRequest() {
     if (!name.trim()) return;
     await api.post(`/users/clan/${encodeURIComponent(name.trim())}/request`);
-    setError("Заявка отправлена");
+    setError("Request sent");
   }
 
   async function handleApproveRequest(id) {
@@ -219,20 +219,20 @@ export default function Clan() {
     <motion.div {...fade} className="max-w-4xl space-y-4">
       {invites.length > 0 && (
         <motion.div {...fade} className="rounded-2xl border border-slate-200 bg-white shadow-lg p-4">
-          <h3 className="text-lg font-semibold">Приглашения в клан</h3>
+          <h3 className="text-lg font-semibold">Clan invites</h3>
           <div className="mt-3 space-y-2">
             {invites.map((i) => (
               <div key={i._id} className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
                 <div className="text-sm text-slate-700">
                   {i.clan}
-                  <span className="text-xs text-slate-500 ml-2">от {i.from?.username || "участника"}</span>
+                  <span className="text-xs text-slate-500 ml-2">from {i.from?.username || "member"}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <button className="text-xs px-3 py-1 rounded-lg bg-slate-900 text-white" onClick={() => handleAcceptInvite(i._id)}>
-                    Принять
+                    Accept
                   </button>
                   <button className="text-xs px-3 py-1 rounded-lg border border-slate-200" onClick={() => handleDenyInvite(i._id)}>
-                    Отклонить
+                    Decline
                   </button>
                 </div>
               </div>
@@ -282,7 +282,7 @@ export default function Clan() {
                   ) : null}
                 </div>
                 <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-slate-200/90">
-                  Лидер
+                  Leader
                 </div>
               </div>
             </div>
@@ -290,17 +290,17 @@ export default function Clan() {
             <div className="absolute bottom-4 left-6">
               <div className="text-xs uppercase tracking-[0.25em] text-slate-300">Astral Clan</div>
               <div className="text-2xl font-semibold text-white">
-                {data?.clan || name || "Клан"}
+                {data?.clan || name || "Clan"}
               </div>
               <div className="mt-2 text-sm text-slate-300">
-                {isConstellation ? "Созвездие собрано ✨" : "Собираем созвездие"}
+                {isConstellation ? "Constellation complete ✨" : "Building the constellation"}
               </div>
               {data?.motto && (
                 <div className="mt-2 text-xs text-slate-200/90">{data.motto}</div>
               )}
             </div>
             <div className="absolute bottom-4 right-6 text-right">
-              <div className="text-xs text-slate-300">Звезд в клане</div>
+              <div className="text-xs text-slate-300">Stars in the clan</div>
               <div className="text-2xl font-semibold text-white">{data?.count || 0}</div>
             </div>
           </div>
@@ -312,12 +312,12 @@ export default function Clan() {
                 </div>
                 <p className="mt-2 text-xs text-slate-500">
                   {isConstellation
-                    ? "Созвездие активировано — клан сияет"
-                    : `Нужно еще ${data?.needed || 0} звезд для созвездия`}
+                    ? "Constellation activated — the clan shines"
+                    : `Need ${data?.needed || 0} more stars for the constellation`}
                 </p>
               </div>
               <div className="px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-600">
-                Звезда — это пользователь
+                A star is a user
               </div>
             </div>
           </div>
@@ -326,21 +326,21 @@ export default function Clan() {
 
       <motion.div {...fade} className="rounded-2xl border border-slate-200 bg-white shadow-lg p-4">
         <div className="flex items-center justify-between gap-3 flex-wrap">
-          <h3 className="text-lg font-semibold">Участники клана</h3>
+          <h3 className="text-lg font-semibold">Clan members</h3>
           <div className="flex items-center gap-2 flex-wrap">
             {user?.clan && (
               <button
                 className="px-3 py-2 rounded-xl border border-rose-200 text-rose-600 text-sm hover:bg-rose-50"
                 onClick={() => setModal({ type: "leave" })}
               >
-                Выйти
+                Leave
               </button>
             )}
             {(data?.isLeader || user?.clanRole === "officer") && (
               <div className="flex items-center gap-2">
                 <input
                   className="w-40 rounded-xl bg-slate-50 border border-slate-200 focus:border-sky-400 focus:ring-0 text-sm"
-                  placeholder="Юзернейм для инвайта"
+                  placeholder="Username to invite"
                   value={inviteName}
                   onChange={(e) => setInviteName(e.target.value.toLowerCase())}
                 />
@@ -348,7 +348,7 @@ export default function Clan() {
                   className="px-3 py-2 rounded-xl bg-slate-900 text-white text-sm hover:bg-black transition"
                   onClick={handleInvite}
                 >
-                  Пригласить
+                  Invite
                 </button>
               </div>
             )}
@@ -357,12 +357,12 @@ export default function Clan() {
                 className="px-3 py-2 rounded-xl bg-slate-900 text-white text-sm hover:bg-black transition"
                 onClick={handleJoinRequest}
               >
-                Подать заявку
+                Apply to join
               </button>
             )}
             <input
               className="w-48 rounded-xl bg-slate-50 border border-slate-200 focus:border-sky-400 focus:ring-0 text-sm"
-              placeholder="Название клана"
+              placeholder="Clan name"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -370,21 +370,21 @@ export default function Clan() {
               className="px-3 py-2 rounded-xl bg-slate-900 text-white text-sm hover:bg-black transition"
               onClick={() => loadClan(name)}
             >
-              Открыть
+              Open
             </button>
           </div>
         </div>
 
         {!user?.clan && !data && (
           <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
-            У вас еще нет клана. Укажите его в профиле или найдите клан по названию.
+            You don't have a clan yet. Set it in your profile or find a clan by name.
             <Link to="/profile" className="ml-2 text-sky-600 hover:text-sky-700">
-              Перейти в профиль
+              Go to profile
             </Link>
           </div>
         )}
 
-        {loading && <div className="mt-4 text-sm text-slate-500">Загрузка...</div>}
+        {loading && <div className="mt-4 text-sm text-slate-500">Loading...</div>}
         {error && <div className="mt-4 text-sm text-rose-500">{error}</div>}
 
         {data?.announcement && (
@@ -395,17 +395,17 @@ export default function Clan() {
 
         {joinRequests.length > 0 && (
           <div className="mt-4 rounded-xl border border-slate-200 bg-white p-3">
-            <p className="text-sm font-semibold">Заявки в клан</p>
+            <p className="text-sm font-semibold">Clan requests</p>
             <div className="mt-2 space-y-2">
               {joinRequests.map((r) => (
                 <div key={r._id} className="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
                   <div className="text-sm text-slate-700">@{r.user?.userTag || r.user?.username}</div>
                   <div className="flex items-center gap-2">
                     <button className="text-xs px-3 py-1 rounded-lg bg-slate-900 text-white" onClick={() => handleApproveRequest(r._id)}>
-                      Принять
+                      Accept
                     </button>
                     <button className="text-xs px-3 py-1 rounded-lg border border-slate-200" onClick={() => handleDenyRequest(r._id)}>
-                      Отклонить
+                      Decline
                     </button>
                   </div>
                 </div>
@@ -420,10 +420,10 @@ export default function Clan() {
               const isLeader = data?.leader?._id === m._id;
               const roleStars = isLeader ? 3 : m.clanRole === "officer" ? 2 : 1;
               const roleTitle = isLeader
-                ? "Полярная звезда"
+                ? "North Star"
                 : m.clanRole === "officer"
-                  ? "Двойная звезда"
-                  : "Малая звезда";
+                  ? "Double Star"
+                  : "Small Star";
               return (
                 <motion.div
                   key={m._id}
@@ -450,7 +450,7 @@ export default function Clan() {
                       <div className="text-sm font-semibold text-slate-900 truncate">{m.username}</div>
                       <div className="text-xs text-slate-500">@{m.userTag || m.username}</div>
                       <div className="text-xs text-slate-500">
-                        Подписчики: {m.followers?.length || 0}
+                        Followers: {m.followers?.length || 0}
                       </div>
                     </div>
                   </Link>
@@ -485,8 +485,8 @@ export default function Clan() {
                                 className="absolute right-0 mt-2 w-[180px] rounded-xl border border-slate-200 bg-white shadow-lg p-1 z-20"
                               >
                                 {[
-                                  { value: "member", label: "Малая звезда" },
-                                  { value: "officer", label: "Двойная звезда" }
+                                  { value: "member", label: "Small Star" },
+                                  { value: "officer", label: "Double Star" }
                                 ].map((role) => (
                                   <button
                                     key={role.value}
@@ -511,7 +511,7 @@ export default function Clan() {
                           disabled={kickingId === m._id}
                           className="text-xs px-2 py-1 rounded-lg border border-rose-200 text-rose-600 hover:bg-rose-50"
                         >
-                          {kickingId === m._id ? "..." : "Кик"}
+                          {kickingId === m._id ? "..." : "Kick"}
                         </button>
                       </div>
                     )}
@@ -523,17 +523,17 @@ export default function Clan() {
         )}
 
         {!loading && members.length === 0 && data && (
-          <div className="mt-4 text-sm text-slate-500">В клане пока нет звезд.</div>
+          <div className="mt-4 text-sm text-slate-500">No stars in the clan yet.</div>
         )}
       </motion.div>
 
       {data?.isLeader && (
         <motion.div {...fade} className="rounded-2xl border border-slate-200 bg-white shadow-lg p-4">
-          <h3 className="text-lg font-semibold">Управление кланом</h3>
-          <p className="text-sm text-slate-500">Видно всем участникам.</p>
+          <h3 className="text-lg font-semibold">Clan management</h3>
+          <p className="text-sm text-slate-500">Visible to all members.</p>
           <div className="mt-4 space-y-3">
             <div className="flex items-center gap-3">
-              <label className="text-xs text-slate-500">Приватный клан</label>
+              <label className="text-xs text-slate-500">Private clan</label>
               <input
                 type="checkbox"
                 checked={isPrivate}
@@ -541,7 +541,7 @@ export default function Clan() {
               />
             </div>
             <div>
-              <label className="text-xs text-slate-500">Девиз</label>
+              <label className="text-xs text-slate-500">Motto</label>
               <input
                 className="w-full rounded-xl bg-slate-50 border border-slate-200 focus:border-sky-400 focus:ring-0"
                 value={motto}
@@ -549,7 +549,7 @@ export default function Clan() {
               />
             </div>
             <div>
-              <label className="text-xs text-slate-500">Объявление</label>
+              <label className="text-xs text-slate-500">Announcement</label>
               <textarea
                 className="w-full rounded-xl bg-slate-50 border border-slate-200 focus:border-sky-400 focus:ring-0"
                 rows={3}
@@ -562,7 +562,7 @@ export default function Clan() {
               disabled={saving}
               className="px-4 py-2 rounded-xl bg-slate-900 text-white text-sm hover:bg-black transition"
             >
-              {saving ? "Сохраняю..." : "Сохранить"}
+              {saving ? "Saving..." : "Save"}
             </button>
           </div>
         </motion.div>
@@ -572,9 +572,9 @@ export default function Clan() {
         {modal?.type === "kick" && (
           <Modal
             open
-            title="Кикнуть участника"
-            description={`Вы уверены, что хотите исключить ${modal.member?.username}?`}
-            confirmText="Кикнуть"
+            title="Kick member"
+            description={`Are you sure you want to remove ${modal.member?.username}?`}
+            confirmText="Kick"
             danger
             onClose={() => setModal(null)}
             onConfirm={() => {
@@ -586,9 +586,9 @@ export default function Clan() {
         {modal?.type === "leave" && (
           <Modal
             open
-            title="Выйти из клана"
-            description="Вы уверены, что хотите выйти из клана?"
-            confirmText="Выйти"
+            title="Leave clan"
+            description="Are you sure you want to leave the clan?"
+            confirmText="Leave"
             danger
             onClose={() => setModal(null)}
             onConfirm={() => {

@@ -64,14 +64,14 @@ export default function PostCard({ post, onUpdate }) {
           </Link>
           <p className="text-xs text-slate-400">{new Date(post.createdAt).toLocaleString()}</p>
           <p className="text-xs text-slate-500">
-            Клан: {clan} {isConstellation ? "• Созвездие собрано ✨" : "• звезда в пути"}
+            Clan: {clan} {isConstellation ? "• Constellation complete ✨" : "• star in progress"}
           </p>
         </div>
       </div>
 
       {post.repostOf && (
         <div className="mt-3 p-3 rounded-xl bg-slate-50 border border-slate-200 text-sm">
-          Репост от {post.repostOf?.author?.username || "unknown"}
+          Repost from {post.repostOf?.author?.username || "unknown"}
           {post.repostOf?.content && <p className="mt-2">{post.repostOf.content}</p>}
         </div>
       )}
@@ -84,7 +84,7 @@ export default function PostCard({ post, onUpdate }) {
             <img src={mediaUrl} alt="media" className="rounded-xl max-h-96 w-full object-cover" />
           ) : (
             <a className="text-sky-600 underline" href={mediaUrl} target="_blank" rel="noreferrer">
-              Скачать файл
+              Download file
             </a>
           )}
         </div>
@@ -96,7 +96,7 @@ export default function PostCard({ post, onUpdate }) {
             liked ? "border-sky-300 text-sky-600 bg-sky-50" : "border-slate-200 hover:bg-slate-50"
           }`}
           onClick={toggleLike}
-          title="Лайк"
+          title="Like"
         >
           <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
             <path d="M12 20s-7-4.35-7-9a4 4 0 0 1 7-2.65A4 4 0 0 1 19 11c0 4.65-7 9-7 9z" />
@@ -124,12 +124,12 @@ export default function PostCard({ post, onUpdate }) {
         <input
           ref={inputRef}
           className="flex-1 rounded-xl bg-slate-50 border border-slate-200 focus:border-sky-400 focus:ring-0"
-          placeholder="Добавить комментарий"
+          placeholder="Add a comment"
           value={comment}
           onChange={(e) => setComment(e.target.value)}
         />
         <button className="px-3 py-1 rounded-xl bg-slate-100" type="submit">
-          Отправить
+          Send
         </button>
       </form>
 
@@ -149,7 +149,7 @@ export default function PostCard({ post, onUpdate }) {
                 onClick={() => handleReply(c.user?.username)}
                 type="button"
               >
-                Ответить
+                Reply
               </button>
             </div>
           ))}

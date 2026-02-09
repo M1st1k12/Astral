@@ -6,12 +6,12 @@ import logo from "../assets/astral-logo.svg";
 import { resolveMediaUrl } from "../utils/media";
 
 const baseNav = [
-  { to: "/", label: "Лента", icon: "home" },
-  { to: "/search", label: "Поиск", icon: "search" },
-  { to: "/notifications", label: "Уведомления", icon: "bell" },
-  { to: "/messages", label: "Чат", icon: "mail" },
-  { to: "/profile", label: "Профиль", icon: "star" },
-  { to: "/clan", label: "Клан", icon: "clan" }
+  { to: "/", label: "Feed", icon: "home" },
+  { to: "/search", label: "Search", icon: "search" },
+  { to: "/notifications", label: "Notifications", icon: "bell" },
+  { to: "/messages", label: "Chat", icon: "mail" },
+  { to: "/profile", label: "Profile", icon: "star" },
+  { to: "/clan", label: "Clan", icon: "clan" }
 ];
 
 function Icon({ name }) {
@@ -86,7 +86,7 @@ export default function Sidebar({ open = false, onClose }) {
     if (user?._id) loadNotifications();
   }, [user?._id, loadNotifications]);
 
-  const nav = user?.isAdmin ? [...baseNav, { to: "/admin", label: "Админ", icon: "admin" }] : baseNav;
+  const nav = user?.isAdmin ? [...baseNav, { to: "/admin", label: "Admin", icon: "admin" }] : baseNav;
 
   return (
     <>

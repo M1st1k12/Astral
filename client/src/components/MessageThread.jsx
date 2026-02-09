@@ -48,7 +48,7 @@ export default function MessageThread() {
         transition={{ duration: 0.25 }}
         className="flex-1 rounded-2xl p-6 flex items-center justify-center bg-white border border-slate-200 shadow-lg"
       >
-        <p className="text-slate-500">Выберите диалог, чтобы начать</p>
+        <p className="text-slate-500">Select a conversation to start</p>
       </motion.div>
     );
   }
@@ -78,12 +78,12 @@ export default function MessageThread() {
             <p className="font-semibold hover:text-sky-600 transition">{other?.username}</p>
             <p className="text-xs text-slate-400">
               {other?.status === "online"
-                ? "В сети"
-                : `Был(а) ${new Date(other?.lastSeen || Date.now()).toLocaleString()}`}
+                ? "Online"
+                : `Last seen ${new Date(other?.lastSeen || Date.now()).toLocaleString()}`}
             </p>
           </div>
         </Link>
-        <span className="text-xs text-sky-600">Личные сообщения</span>
+        <span className="text-xs text-sky-600">Direct messages</span>
       </div>
 
       <div className="flex-1 overflow-auto mt-4 space-y-3">
@@ -93,7 +93,7 @@ export default function MessageThread() {
           ))}
         </AnimatePresence>
         {typing[activeConversation._id] && (
-          <p className="text-xs text-slate-400">Печатает...</p>
+          <p className="text-xs text-slate-400">Typing...</p>
         )}
         <div ref={bottomRef} />
       </div>

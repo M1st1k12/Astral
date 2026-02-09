@@ -36,7 +36,7 @@ export default function MessageInput({ conversationId, disabled }) {
     >
       <input
         className="flex-1 min-w-[200px] rounded-xl bg-slate-50 border border-slate-200 focus:border-sky-400 focus:ring-0"
-        placeholder="Написать сообщение..."
+        placeholder="Write a message..."
         value={text}
         onChange={handleTyping}
         disabled={disabled}
@@ -84,14 +84,14 @@ export default function MessageInput({ conversationId, disabled }) {
         htmlFor="fileUpload"
         className="cursor-pointer px-3 py-2 rounded-xl bg-slate-100 border border-slate-200 text-xs hover:bg-slate-200"
       >
-        {file ? "Файл" : "Прикрепить"}
+        {file ? "File" : "Attach"}
       </label>
       <button
         type="submit"
         disabled={disabled}
         className="px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold hover:bg-black"
       >
-        Отправить
+        Send
       </button>
     </motion.form>
   );

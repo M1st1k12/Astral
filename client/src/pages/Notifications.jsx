@@ -5,13 +5,13 @@ import useNotificationStore from "../store/notificationStore";
 import { resolveMediaUrl } from "../utils/media";
 
 const labels = {
-  like: "поставил(а) лайк",
-  comment: "оставил(а) комментарий",
-  follow: "подписался(лась) на вас",
-  follow_request: "запросил(а) подписку",
-  follow_approved: "подтвердил(а) подписку",
-  repost: "сделал(а) репост",
-  message: "написал(а) сообщение"
+  like: "liked your post",
+  comment: "commented on your post",
+  follow: "followed you",
+  follow_request: "requested to follow you",
+  follow_approved: "approved your request",
+  repost: "reposted your post",
+  message: "sent you a message"
 };
 
 export default function Notifications() {
@@ -31,13 +31,13 @@ export default function Notifications() {
       className="max-w-2xl space-y-4"
     >
       <div className="rounded-2xl p-4 bg-white border border-slate-200 shadow-lg flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Уведомления</h2>
-        <button className="text-sm text-sky-600" onClick={markAllRead}>Отметить прочитанным</button>
+        <h2 className="text-lg font-semibold">Notifications</h2>
+        <button className="text-sm text-sky-600" onClick={markAllRead}>Mark all read</button>
       </div>
 
       {notifications.length === 0 && (
         <div className="rounded-2xl p-6 bg-white border border-slate-200 shadow-lg text-slate-500">
-          Нет уведомлений
+          No notifications
         </div>
       )}
 
@@ -61,7 +61,7 @@ export default function Notifications() {
               <div className="text-xs text-slate-400">
                 {n.createdAt ? new Date(n.createdAt).toLocaleString() : ""}
               </div>
-              {!n.read && <span className="text-xs text-sky-600">Новое</span>}
+              {!n.read && <span className="text-xs text-sky-600">New</span>}
             </div>
           </div>
         );
